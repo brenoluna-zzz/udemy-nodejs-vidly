@@ -10,7 +10,7 @@ describe('/api/genres', () => {
     beforeEach(() => { server = require('../../../index'); });
     afterEach(async () => {
         await Genre.remove({}); //clean up the db for the endpoint
-        server.close();
+        await server.close();
     });
 
     describe('GET /', () => {
@@ -56,8 +56,8 @@ describe('/api/genres', () => {
         // its "old and procedural way of programming".
         let token;
         let name;
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .post('/api/genres')
                 .set('x-auth-token', token)
                 .send({ name });
@@ -109,8 +109,8 @@ describe('/api/genres', () => {
         let token;
         let name;
         let _id;
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .put(`/api/genres/${_id}`)
                 .set('x-auth-token', token)
                 .send({ name });
@@ -160,7 +160,7 @@ describe('/api/genres', () => {
             await exec();
 
             const genre = await Genre.findById(_id); // find in db
-            console.log(genre);
+            
             expect(genre).not.toBeNull();
             expect(genre._id).toEqual(mongoose.Types.ObjectId(_id));
         });
@@ -176,8 +176,8 @@ describe('/api/genres', () => {
     describe('DELETE /:id', () => {
         let token;
         let _id;
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .delete(`/api/genres/${_id}`)
                 .set('x-auth-token', token);
         }
